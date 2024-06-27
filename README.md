@@ -1,17 +1,14 @@
-## Introduction
+## Overview
+The segmentation of lung tumors in medical imaging is a critical task in the field of medical diagnostics. This project leverages deep learning techniques, specifically the PyTorch framework, to achieve precise lung tumor segmentation.
 
-First, we need to obtain and preprocess the data for the segmentation task
-The data is provided by the medical segmentation decathlon challenge(http://medicaldecathlon.com/) <br />
-
-(Data License: CC-BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/) <br/>
-![alt text](https://github.com/fshnkarimi/LungTumor-Segmentation/blob/main/Images/images_1.gif?raw=true)
+![alt text](https://github.com/rbhardwaj2186/Lung_Tumor_Segmentation/blob/main/Images/images_2.gif)
 
 ## Preprocessing
 
-1. CT images have a fixed range from -1000 to 3071. **Thus we can normalize by dividing by 3071** <br /> we don't need to compute mean and standard deviation for this task
-2. As we want to focus on lung tumors, we can crop away parts of the lower abdomen to reduce the complexity and help the network learn. As an example, **we might skip the first 30 slices (from lower abdomen to the neck)** (last axis)
-3. As we want to tackle this task on a slice level (2D) and not on a subject level (3D) to reduce the computational cost **we should store the preprocessed data as 2d files**, because reading a single slice is much faster than loading the complete NIfTI file.
-4. Resize the single slices and masks to (256, 256) (when resizing the mask, pass interpolation=cv2.INTER_NEAREST to the resize function to apply nearest neighbour interpolation)
+1. Normalization: Given that CT images typically range from -1000 to 3071 HU, normalization is performed by dividing the pixel values by 3071, eliminating the need for mean and standard deviation computations.
+2. Region of Interest (ROI) Extraction: To enhance focus on lung tumors, non-essential regions, such as parts of the lower abdomen, are excluded. For instance, the initial 30 slices (covering the lower abdomen to neck) can be omitted.
+3. Dimensional Reduction: To reduce computational overhead, the task is approached on a slice level (2D) instead of a subject level (3D). Preprocessed data is stored as 2D slices, which speeds up the reading process compared to loading complete NIfTI files.
+4. Resizing: Each slice and corresponding mask is resized to (256, 256) pixels. Nearest neighbor interpolation is applied when resizing masks to maintain label integrity.
 
 ## DataSet Creation
 We need to implement the following functionality:
@@ -20,7 +17,7 @@ We need to implement the following functionality:
 3. Load slice and label
 4. Data Augmentation.
 5. Return slice and mask <br/>
-![alt text](https://github.com/fshnkarimi/LungTumor-Segmentation/blob/main/Images/images_3.png?raw=true)
+![alt text](https://github.com/rbhardwaj2186/Lung_Tumor_Segmentation/blob/main/Images/images_3.png)
 
 ## Model
 then, we will create the model for the atrium segmentation! <br />
@@ -31,7 +28,7 @@ The encoder reduces the size of the feature maps by using downconvolutional laye
 The decoder reconstructs a mask of the input shape over several layers by upsampling.
 Additionally skip-connections allow a direct information flow from the encoder to the decoder on all intermediate levels of the UNET.
 This allows for a high quality of the produced mask and simplifies the training process.<br />
-![alt text](https://github.com/fshnkarimi/Atrium-Segmentation/blob/main/Images/unet.png?raw=true)
+![alt text](https://github.com/rbhardwaj2186/Lung_Tumor_Segmentation/blob/main/unet.png)
 
 ## Training
 We will implement full segmentaion model with pytorch-lightning.
@@ -48,4 +45,4 @@ Computed Dice-score: 0.896
 
 ## Visualization
 
-![alt text](https://github.com/fshnkarimi/LungTumor-Segmentation/blob/main/Images/images_2.gif?raw=true)
+![alt text](https://github.com/rbhardwaj2186/Lung_Tumor_Segmentation/blob/main/Images/images_2.gif)
